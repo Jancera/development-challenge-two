@@ -1,25 +1,54 @@
-import logo from './logo.svg';
-import './App.css';
+import { Route, Switch } from "react-router-dom";
+import Header from "./components/Header";
+import Home from "./pages/Home/Home";
+import Pesquisar from "./pages/Pesquisar/Pesquisar";
+import Adicionar from "./pages/Adicionar/Adicionar";
+import Historico from "./pages/Historico/Historico";
 
-function App() {
+import {
+  createTheme,
+  ThemeProvider,
+} from "@material-ui/core/styles";
+
+const theme = createTheme({
+  palette: {
+    primary: {
+      light: "#757ce8",
+      main: "#fff",
+      dark: "#002884",
+      contrastText: "#fff",
+    },
+    secondary: {
+      light: "#ff7961",
+      main: "#009adf",
+      dark: "#ba000d",
+      contrastText: "#000",
+    },
+  },
+});
+
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <ThemeProvider theme={theme}>
+        <Header />
+        <Switch>
+          <Route path="/" exact>
+            <Home />
+          </Route>
+          <Route path="/pesquisar">
+            <Pesquisar />
+          </Route>
+          <Route path="/adicionar">
+            <Adicionar />
+          </Route>
+          <Route path="/historico">
+            <Historico />
+          </Route>
+        </Switch>
+      </ThemeProvider>
     </div>
   );
-}
+};
 
 export default App;
