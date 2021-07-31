@@ -4,9 +4,10 @@ import AppBar from "@material-ui/core/AppBar";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import logo from "../assets/medcloud.svg";
-import "./Header.css";
+import useStyles from "./headerStyles";
 
 const Header = () => {
+  const classes = useStyles();
   const [value, setValue] = useState(0);
 
   const handleChange = (_, newValue) => {
@@ -34,13 +35,9 @@ const Header = () => {
     <AppBar
       position="static"
       elevation={0}
-      style={{
-        flexDirection: "row",
-        justifyContent: "center",
-        padding: 20,
-      }}
+      className={classes.container}
     >
-      <img className="logo" src={logo} alt="Logo" />
+      <img className={classes.logo} src={logo} alt="Logo" />
       <Tabs
         value={value}
         onChange={handleChange}

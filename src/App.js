@@ -9,6 +9,7 @@ import {
   createTheme,
   ThemeProvider,
 } from "@material-ui/core/styles";
+import CssBaseline from "@material-ui/core/CssBaseline";
 
 const theme = createTheme({
   palette: {
@@ -24,6 +25,12 @@ const theme = createTheme({
       dark: "#ba000d",
       contrastText: "#000",
     },
+    grey: {
+      main: "#b9b9b9",
+    },
+  },
+  typography: {
+    fontFamily: ["Poppins"],
   },
 });
 
@@ -31,21 +38,24 @@ const App = () => {
   return (
     <div>
       <ThemeProvider theme={theme}>
+        <CssBaseline />
         <Header />
-        <Switch>
-          <Route path="/" exact>
-            <Home />
-          </Route>
-          <Route path="/pesquisar">
-            <Pesquisar />
-          </Route>
-          <Route path="/adicionar">
-            <Adicionar />
-          </Route>
-          <Route path="/historico">
-            <Historico />
-          </Route>
-        </Switch>
+        <main>
+          <Switch>
+            <Route path="/" exact>
+              <Home />
+            </Route>
+            <Route path="/pesquisar">
+              <Pesquisar />
+            </Route>
+            <Route path="/adicionar">
+              <Adicionar />
+            </Route>
+            <Route path="/historico">
+              <Historico />
+            </Route>
+          </Switch>
+        </main>
       </ThemeProvider>
     </div>
   );
