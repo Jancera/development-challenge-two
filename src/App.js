@@ -28,6 +28,9 @@ const theme = createTheme({
   },
   typography: {
     fontFamily: ["Poppins", "sans-serif"].join(","),
+    fontWeightLight: "500",
+    fontWeightRegular: "600",
+    fontWeightMedium: "700",
   },
 });
 

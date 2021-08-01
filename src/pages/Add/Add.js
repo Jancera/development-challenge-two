@@ -24,74 +24,81 @@ const Add = () => {
 
   return (
     <Container maxWidth="sm">
-      <Typography>
+      <Typography className={classes.text}>
         Preencha as informações para adicionar ao nosso
         sistema.
       </Typography>
-      <TextField
-        className={classes.input}
-        label="CPF"
-        variant="outlined"
-        placeholder="xxx.xxx.xxx-xx"
-        color="secondary"
-        required
-        fullWidth
-      />
-      <TextField
-        className={classes.input}
-        label="Nome"
-        variant="outlined"
-        placeholder="Nome"
-        color="secondary"
-        required
-        fullWidth
-      />
-      <TextField
-        className={classes.input}
-        label="Sobrenome"
-        variant="outlined"
-        placeholder="Sobrenome"
-        color="secondary"
-        required
-        fullWidth
-      />
-      <TextField
-        className={classes.input}
-        label="Endereço"
-        variant="outlined"
-        placeholder="Endereço"
-        color="secondary"
-        required
-        fullWidth
-      />
-      <TextField
-        className={classes.input}
-        label="Nome da mãe"
-        variant="outlined"
-        placeholder="xxx.xxx.xxx-xx"
-        color="secondary"
-        fullWidth
-      />
-      <TextField
-        className={classes.input}
-        label="Nome do pai"
-        variant="outlined"
-        placeholder="xxx.xxx.xxx-xx"
-        color="secondary"
-        fullWidth
-      />
-      <TextField
-        className={classes.input}
-        label="Data de nascimento"
-        color="secondary"
-        type="date"
-        required
-        fullWidth
-        InputLabelProps={{
-          shrink: true,
-        }}
-      />
-      <Grid container spacing={4}>
+      <div className={classes.inputContainer}>
+        <TextField
+          className={classes.input}
+          label="CPF"
+          variant="outlined"
+          placeholder="xxx.xxx.xxx-xx"
+          color="secondary"
+          required
+          fullWidth
+        />
+        <TextField
+          className={classes.input}
+          label="Nome"
+          variant="outlined"
+          placeholder="Nome"
+          color="secondary"
+          required
+          fullWidth
+        />
+        <TextField
+          className={classes.input}
+          label="Sobrenome"
+          variant="outlined"
+          placeholder="Sobrenome"
+          color="secondary"
+          required
+          fullWidth
+        />
+        <TextField
+          className={classes.input}
+          label="Endereço"
+          variant="outlined"
+          placeholder="Endereço"
+          color="secondary"
+          required
+          fullWidth
+        />
+        <TextField
+          className={classes.input}
+          label="Nome da mãe"
+          variant="outlined"
+          placeholder="xxx.xxx.xxx-xx"
+          color="secondary"
+          fullWidth
+        />
+        <TextField
+          className={classes.input}
+          label="Nome do pai"
+          variant="outlined"
+          placeholder="xxx.xxx.xxx-xx"
+          color="secondary"
+          fullWidth
+        />
+        <TextField
+          className={classes.input}
+          label="Data de nascimento"
+          color="secondary"
+          type="date"
+          required
+          fullWidth
+          InputLabelProps={{
+            shrink: true,
+          }}
+        />
+      </div>
+
+      <Grid
+        className={classes.buttonContainer}
+        container
+        spacing={5}
+      >
         <Grid item>
           <Button
             className={classes.button}
