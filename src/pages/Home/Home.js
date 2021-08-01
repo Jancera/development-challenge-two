@@ -47,6 +47,7 @@ const Home = () => {
               <Button
                 variant="outlined"
                 color="secondary"
+                size="large"
                 onClick={() => history.push("/pesquisar")}
               >
                 Pesquisar
@@ -56,6 +57,7 @@ const Home = () => {
               <Button
                 variant="outlined"
                 color="secondary"
+                size="large"
                 onClick={() => history.push("/adicionar")}
               >
                 Adicionar

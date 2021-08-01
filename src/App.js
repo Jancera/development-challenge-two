@@ -1,9 +1,9 @@
 import { Route, Switch } from "react-router-dom";
 import Header from "./components/Header";
 import Home from "./pages/Home/Home";
-import Pesquisar from "./pages/Pesquisar/Pesquisar";
-import Adicionar from "./pages/Adicionar/Adicionar";
-import Historico from "./pages/Historico/Historico";
+import Search from "./pages/Search/Search";
+import Add from "./pages/Add/Add";
+import History from "./pages/History/History";
 
 import {
   createTheme,
@@ -17,47 +17,41 @@ const theme = createTheme({
       light: "#757ce8",
       main: "#fff",
       dark: "#002884",
-      contrastText: "#fff",
+      contrastText: "#000",
     },
     secondary: {
       light: "#ff7961",
       main: "#009adf",
-      dark: "#ba000d",
-      contrastText: "#000",
-    },
-    grey: {
-      main: "#b9b9b9",
+      dark: "#04b703",
+      contrastText: "#fff",
     },
   },
   typography: {
-    fontFamily: ["Poppins"],
+    fontFamily: ["Poppins", "sans-serif"].join(","),
   },
 });
 
 const App = () => {
   return (
-    <div>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <Header />
-        <main>
-          <Switch>
-            <Route path="/" exact>
-              <Home />
-            </Route>
-            <Route path="/pesquisar">
-              <Pesquisar />
-            </Route>
-            <Route path="/adicionar">
-              <Adicionar />
-            </Route>
-            <Route path="/historico">
-              <Historico />
-            </Route>
-          </Switch>
-        </main>
-      </ThemeProvider>
-    </div>
+    <ThemeProvider theme={theme}>
+      <Header />
+      <main>
+        <Switch>
+          <Route path="/" exact>
+            <Home />
+          </Route>
+          <Route path="/search">
+            <Search />
+          </Route>
+          <Route path="/add">
+            <Add />
+          </Route>
+          <Route path="/history">
+            <History />
+          </Route>
+        </Switch>
+      </main>
+    </ThemeProvider>
   );
 };
 

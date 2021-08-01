@@ -4,7 +4,8 @@ const useStyles = makeStyles({
   container: {
     flexDirection: "row",
     justifyContent: "center",
-    padding: "10px",
+    alignItems: "center",
+    height: "10vh",
   },
   logo: {
     maxWidth: "350px",

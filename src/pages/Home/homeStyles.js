@@ -6,12 +6,12 @@ const useStyles = makeStyles({
     alignItems: "center",
   },
   smallText: {
-    fontSize: "1.2em",
-    letterSpacing: "4px",
+    fontSize: "18px",
     fontWeight: "bold",
+    letterSpacing: "4px",
   },
   bigText: {
-    fontSize: "4em",
+    fontSize: "64px",
     fontWeight: "bold",
     marginBottom: "30px",
   },

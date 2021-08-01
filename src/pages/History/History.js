@@ -1,8 +1,8 @@
-const Historico = () => {
+const History = () => {
   return (
     <div>
       <p>Historico</p>
     </div>
   );
 };
-export default Historico;
+export default History;

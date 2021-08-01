@@ -20,11 +20,11 @@ const Header = () => {
   useEffect(() => {
     if (location.pathname === "/") {
       setValue(0);
-    } else if (location.pathname === "/pesquisar") {
+    } else if (location.pathname === "/search") {
       setValue(1);
-    } else if (location.pathname === "/adicionar") {
+    } else if (location.pathname === "/add") {
       setValue(2);
-    } else if (location.pathname === "/historico") {
+    } else if (location.pathname === "/history") {
       setValue(3);
     }
   }, [location]);
@@ -51,17 +51,17 @@ const Header = () => {
         <Tab
           label="Pesquisar"
           disableRipple
-          onClick={() => navigate("/pesquisar")}
+          onClick={() => navigate("/search")}
         />
         <Tab
           label="Adicionar"
           disableRipple
-          onClick={() => navigate("/adicionar")}
+          onClick={() => navigate("/add")}
         />
         <Tab
           label="Histórico"
           disableRipple
-          onClick={() => navigate("/historico")}
+          onClick={() => navigate("/history")}
         />
       </Tabs>
     </AppBar>
