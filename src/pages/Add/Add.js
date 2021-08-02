@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   Container,
   TextField,
@@ -91,6 +92,9 @@ const Add = () => {
           InputLabelProps={{
             shrink: true,
           }}
+          error={false}
+          helperText="Data de nascimento"
+          onChange={(text) => {}}
         />
       </div>
 
@@ -106,7 +110,7 @@ const Add = () => {
             color="secondary"
             size="large"
             type="submit"
-            onClick={() => console.log("clicked")}
+            onClick={() => console.log()}
           >
             Adicionar
           </Button>

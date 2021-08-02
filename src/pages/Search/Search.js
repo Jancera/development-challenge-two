@@ -4,8 +4,11 @@ import {
   Typography,
   Button,
 } from "@material-ui/core";
+import axios from "axios";
 import useStyles from "./searchStyles";
 import searchDrawing from "../../assets/search.svg";
+
+const data = axios.patch();
 
 const Search = () => {
   const classes = useStyles();
