@@ -4,19 +4,26 @@ import {
   Container,
   Typography,
   Button,
+  Card,
+  CardContent,
+  CardActions,
 } from "@material-ui/core";
 import aws from "../../api/aws";
 import useStyles from "./searchStyles";
 import searchDrawing from "../../assets/search.svg";
+import CardInfo from "../../components/CardInfo/CardInfo";
+import CardEdit from "../../components/CardEdit/CardEdit";
 
 const Search = () => {
   const [id, setId] = useState("");
+  const [result, setResult] = useState({});
+  const [isEdit, setIsEdit] = useState(false);
   const classes = useStyles();
-
-  const getUser = (user) => {
+  console.log(result);
+  const getUser = async (user) => {
     try {
-      const data = aws.get(`/${user}`);
-      console.log(data);
+      const response = await aws.get(`/${user}`);
+      setResult(response.data.Item);
     } catch (err) {
       console.log(err);
     }
@@ -35,6 +42,12 @@ const Search = () => {
         className={classes.mainContainer}
         maxWidth="sm"
       >
+        {isEdit ? (
+          <CardEdit />
+        ) : (
+          <CardInfo data={result} setIsEdit={setIsEdit} />
+        )}
+
         <Typography className={classes.text}>
           Para realizar a pesquisa, precisamos do CPF a ser
           consultado.
@@ -57,7 +70,10 @@ const Search = () => {
             color="secondary"
             size="large"
             type="submit"
-            onClick={getUser(id)}
+            onClick={(e) => {
+              e.preventDefault();
+              getUser(id);
+            }}
           >
             Pesquisar
           </Button>
