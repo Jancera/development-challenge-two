@@ -1,17 +1,27 @@
+import { useState } from "react";
 import {
   TextField,
   Container,
   Typography,
   Button,
 } from "@material-ui/core";
-import axios from "axios";
+import aws from "../../api/aws";
 import useStyles from "./searchStyles";
 import searchDrawing from "../../assets/search.svg";
 
-const data = axios.patch();
-
 const Search = () => {
+  const [id, setId] = useState("");
   const classes = useStyles();
+
+  const getUser = (user) => {
+    try {
+      const data = aws.get(`/${user}`);
+      console.log(data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
     <div className={classes.container}>
       <div className={classes.drawingContainer}>
@@ -38,6 +48,8 @@ const Search = () => {
             required
             fullWidth
             className={classes.input}
+            value={id}
+            onChange={(event) => setId(event.target.value)}
           />
           <Button
             className={classes.button}
@@ -45,7 +57,7 @@ const Search = () => {
             color="secondary"
             size="large"
             type="submit"
-            onClick={() => console.log("clicked")}
+            onClick={getUser(id)}
           >
             Pesquisar
           </Button>
