@@ -13,12 +13,12 @@ import useStyles from "./addStyles";
 const Add = () => {
   const classes = useStyles();
 
-  const ColorButton = withStyles((theme) => ({
+  const RedButton = withStyles((theme) => ({
     root: {
-      color: theme.palette.getContrastText(red[500]),
-      backgroundColor: red[500],
+      color: theme.palette.getContrastText("#ff3d00"),
+      backgroundColor: "#ff3d00",
       "&:hover": {
-        backgroundColor: red[700],
+        backgroundColor: "#8c2200",
       },
     },
   }))(Button);
@@ -116,13 +116,13 @@ const Add = () => {
           </Button>
         </Grid>
         <Grid item>
-          <ColorButton
+          <RedButton
             variant="contained"
             size="large"
             color="primary"
           >
             Cancelar
-          </ColorButton>
+          </RedButton>
         </Grid>
       </Grid>
     </Container>

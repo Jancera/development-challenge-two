@@ -1,10 +1,41 @@
-import { TextField } from "@material-ui/core";
+import { useState } from "react";
+import {
+  TextField,
+  Button,
+  withStyles,
+} from "@material-ui/core";
+import { red } from "@material-ui/core/colors";
 import useStyles from "./cardEditStyles";
 
-const CardEdit = () => {
+const CardEdit = ({ data, setIsEdit }) => {
+  const [patientName, setPatientName] = useState(
+    data.patientName
+  );
+  const [lastName, setLastName] = useState(data.lastName);
+  const [address, setAddress] = useState(data.address);
+  const [motherName, setMotherName] = useState(
+    data.motherName
+  );
+  const [fatherName, setFatherName] = useState(
+    data.fatherName
+  );
+  const [birthDate, setBirthDate] = useState(
+    data.birthDate
+  );
   const classes = useStyles();
+
+  const RedButton = withStyles((theme) => ({
+    root: {
+      color: theme.palette.getContrastText("#ff3d00"),
+      backgroundColor: "#ff3d00",
+      "&:hover": {
+        backgroundColor: "#8c2200",
+      },
+    },
+  }))(Button);
+
   return (
-    <div>
+    <>
       <TextField
         className={classes.input}
         label="CPF"
@@ -13,6 +44,11 @@ const CardEdit = () => {
         color="secondary"
         required
         fullWidth
+        InputLabelProps={{
+          shrink: true,
+        }}
+        disabled
+        value={data.id}
       />
       <TextField
         className={classes.input}
@@ -22,6 +58,8 @@ const CardEdit = () => {
         color="secondary"
         required
         fullWidth
+        value={patientName}
+        onChange={(value) => setPatientName(value)}
       />
       <TextField
         className={classes.input}
@@ -31,6 +69,8 @@ const CardEdit = () => {
         color="secondary"
         required
         fullWidth
+        value={lastName}
+        onChange={(value) => setLastName(value)}
       />
       <TextField
         className={classes.input}
@@ -40,6 +80,8 @@ const CardEdit = () => {
         color="secondary"
         required
         fullWidth
+        value={address}
+        onChange={(value) => setAddress(value)}
       />
       <TextField
         className={classes.input}
@@ -48,6 +90,8 @@ const CardEdit = () => {
         placeholder="xxx.xxx.xxx-xx"
         color="secondary"
         fullWidth
+        value={motherName}
+        onChange={(value) => setMotherName(value)}
       />
       <TextField
         className={classes.input}
@@ -56,6 +100,8 @@ const CardEdit = () => {
         placeholder="xxx.xxx.xxx-xx"
         color="secondary"
         fullWidth
+        value={fatherName}
+        onChange={(value) => setFatherName(value)}
       />
       <TextField
         className={classes.input}
@@ -67,11 +113,33 @@ const CardEdit = () => {
         InputLabelProps={{
           shrink: true,
         }}
-        error={false}
-        helperText="Data de nascimento"
-        onChange={(text) => {}}
+        value={birthDate}
+        onChange={(value) => setBirthDate(value)}
       />
-    </div>
+      <Button
+        className={classes.button}
+        variant="contained"
+        color="secondary"
+        size="large"
+        onClick={(e) => {
+          e.preventDefault();
+          setIsEdit(false);
+        }}
+      >
+        Salvar
+      </Button>
+      <Button
+        className={classes.button}
+        variant="contained"
+        color="secondary"
+        size="large"
+        onClick={(e) => {
+          e.preventDefault();
+        }}
+      >
+        Cancelar
+      </Button>
+    </>
   );
 };
 

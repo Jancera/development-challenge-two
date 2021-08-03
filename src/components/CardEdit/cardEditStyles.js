@@ -14,6 +14,9 @@ const useStyles = makeStyles({
   buttonContainer: {
     marginTop: "1em",
   },
+  button: {
+    margin: "1em 2em",
+  },
 });
 
 export default useStyles;

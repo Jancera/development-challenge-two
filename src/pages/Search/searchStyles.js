@@ -11,11 +11,11 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     flexDirection: "column",
     marginTop: "10em",
+    zIndex: 1,
   },
   text: {
     marginTop: "1em",
     fontSize: "20px",
-    zIndex: 999,
   },
   form: {
     display: "flex",
@@ -40,6 +40,7 @@ const useStyles = makeStyles((theme) => ({
     minWidth: "200px",
     width: "100%",
     opacity: "0.6",
+
     //marginRight: "300px",
   },
   "@global": {
