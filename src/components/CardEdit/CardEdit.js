@@ -5,9 +5,10 @@ import {
   withStyles,
 } from "@material-ui/core";
 import { red } from "@material-ui/core/colors";
+import aws from "../../api/aws";
 import useStyles from "./cardEditStyles";
 
-const CardEdit = ({ data, setIsEdit }) => {
+const CardEdit = ({ data, setIsEdit, setResult }) => {
   const [patientName, setPatientName] = useState(
     data.patientName
   );
@@ -34,6 +35,25 @@ const CardEdit = ({ data, setIsEdit }) => {
     },
   }))(Button);
 
+  const newValues = {
+    id: data.id,
+    patientName: patientName,
+    lastName: lastName,
+    address: address,
+    motherName: motherName,
+    fatherName: fatherName,
+    birthDate: birthDate,
+  };
+
+  const saveEdit = async () => {
+    try {
+      await aws.patch("/edit", newValues);
+      setResult(newValues);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   return (
     <>
       <TextField
@@ -59,7 +79,9 @@ const CardEdit = ({ data, setIsEdit }) => {
         required
         fullWidth
         value={patientName}
-        onChange={(value) => setPatientName(value)}
+        onChange={(value) =>
+          setPatientName(value.target.value)
+        }
       />
       <TextField
         className={classes.input}
@@ -70,7 +92,9 @@ const CardEdit = ({ data, setIsEdit }) => {
         required
         fullWidth
         value={lastName}
-        onChange={(value) => setLastName(value)}
+        onChange={(value) =>
+          setLastName(value.target.value)
+        }
       />
       <TextField
         className={classes.input}
@@ -81,7 +105,7 @@ const CardEdit = ({ data, setIsEdit }) => {
         required
         fullWidth
         value={address}
-        onChange={(value) => setAddress(value)}
+        onChange={(value) => setAddress(value.target.value)}
       />
       <TextField
         className={classes.input}
@@ -91,7 +115,9 @@ const CardEdit = ({ data, setIsEdit }) => {
         color="secondary"
         fullWidth
         value={motherName}
-        onChange={(value) => setMotherName(value)}
+        onChange={(value) =>
+          setMotherName(value.target.value)
+        }
       />
       <TextField
         className={classes.input}
@@ -101,7 +127,9 @@ const CardEdit = ({ data, setIsEdit }) => {
         color="secondary"
         fullWidth
         value={fatherName}
-        onChange={(value) => setFatherName(value)}
+        onChange={(value) =>
+          setFatherName(value.target.value)
+        }
       />
       <TextField
         className={classes.input}
@@ -114,7 +142,9 @@ const CardEdit = ({ data, setIsEdit }) => {
           shrink: true,
         }}
         value={birthDate}
-        onChange={(value) => setBirthDate(value)}
+        onChange={(value) =>
+          setBirthDate(value.target.value)
+        }
       />
       <Button
         className={classes.button}
@@ -123,12 +153,13 @@ const CardEdit = ({ data, setIsEdit }) => {
         size="large"
         onClick={(e) => {
           e.preventDefault();
+          saveEdit();
           setIsEdit(false);
         }}
       >
         Salvar
       </Button>
-      <Button
+      <RedButton
         className={classes.button}
         variant="contained"
         color="secondary"
@@ -138,7 +169,7 @@ const CardEdit = ({ data, setIsEdit }) => {
         }}
       >
         Cancelar
-      </Button>
+      </RedButton>
     </>
   );
 };

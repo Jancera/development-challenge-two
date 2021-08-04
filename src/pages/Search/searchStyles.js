@@ -58,6 +58,16 @@ const useStyles = makeStyles((theme) => ({
   selector: {
     animation: "fadeIn 1s ease-in-out", // --> this works
   },
+  circularProgress: {
+    position: "absolute",
+    color: "#03fc03",
+  },
+  buttonContainer: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+  },
 }));
 
 export default useStyles;

@@ -7,6 +7,7 @@ import {
   Card,
   CardContent,
   CardActions,
+  CircularProgress,
 } from "@material-ui/core";
 import aws from "../../api/aws";
 import useStyles from "./searchStyles";
@@ -19,15 +20,21 @@ const Search = () => {
   const [result, setResult] = useState({});
   const [isSearching, setIsSearching] = useState(true);
   const [isEdit, setIsEdit] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [err, setErr] = useState(false);
   const classes = useStyles();
   console.log(result);
   const getUser = async (user) => {
     try {
+      setIsLoading(true);
       const response = await aws.get(`/${user}`);
       setResult(response.data.Item);
+      setIsLoading(false);
       setIsSearching(false);
-    } catch (err) {
-      console.log(err);
+    } catch (e) {
+      setIsLoading(false);
+      setErr(true);
+      console.log(e);
     }
   };
 
@@ -63,27 +70,42 @@ const Search = () => {
                 fullWidth
                 className={classes.input}
                 value={id}
+                error={err}
+                helperText="Erro de conexão"
                 onChange={(event) =>
                   setId(event.target.value)
                 }
               />
-              <Button
-                className={classes.button}
-                variant="contained"
-                color="secondary"
-                size="large"
-                type="submit"
-                onClick={(e) => {
-                  e.preventDefault();
-                  getUser(id);
-                }}
-              >
-                Pesquisar
-              </Button>
+              <div className={classes.buttonContainer}>
+                <Button
+                  className={classes.button}
+                  variant="contained"
+                  color="secondary"
+                  size="large"
+                  type="submit"
+                  disabled={isLoading}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    getUser(id);
+                  }}
+                >
+                  Pesquisar
+                </Button>
+                {isLoading ? (
+                  <CircularProgress
+                    className={classes.circularProgress}
+                    size={30}
+                  />
+                ) : null}
+              </div>
             </form>
           </>
         ) : isEdit ? (
-          <CardEdit data={result} setIsEdit={setIsEdit} />
+          <CardEdit
+            data={result}
+            setIsEdit={setIsEdit}
+            setResult={setResult}
+          />
         ) : (
           <CardInfo data={result} setIsEdit={setIsEdit} />
         )}

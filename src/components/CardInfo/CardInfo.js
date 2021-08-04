@@ -6,7 +6,7 @@ import {
   CardActions,
   withStyles,
 } from "@material-ui/core";
-import { red } from "@material-ui/core/colors";
+import aws from "../../api/aws";
 import useStyle from "./cardInfoStyles";
 
 const CardInfo = ({ data, setIsEdit }) => {
@@ -21,6 +21,10 @@ const CardInfo = ({ data, setIsEdit }) => {
       },
     },
   }))(Button);
+
+  const deleteUser = (id) => {
+    const response = await aws.delete(`/delete`);
+  };
 
   return (
     <>
