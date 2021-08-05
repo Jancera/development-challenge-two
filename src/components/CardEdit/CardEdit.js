@@ -4,11 +4,10 @@ import {
   Button,
   withStyles,
 } from "@material-ui/core";
-import { red } from "@material-ui/core/colors";
 import aws from "../../api/aws";
 import useStyles from "./cardEditStyles";
 
-const CardEdit = ({ data, setIsEdit, setResult }) => {
+const CardEdit = ({ data, dispatch }) => {
   const [patientName, setPatientName] = useState(
     data.patientName
   );
@@ -35,7 +34,7 @@ const CardEdit = ({ data, setIsEdit, setResult }) => {
     },
   }))(Button);
 
-  const newValues = {
+  const editedInfo = {
     id: data.id,
     patientName: patientName,
     lastName: lastName,
@@ -45,10 +44,11 @@ const CardEdit = ({ data, setIsEdit, setResult }) => {
     birthDate: birthDate,
   };
 
-  const saveEdit = async () => {
+  const handleSave = async () => {
     try {
-      await aws.patch("/edit", newValues);
-      setResult(newValues);
+      await aws.patch("/edit", editedInfo);
+      dispatch({ type: "setData", payload: editedInfo });
+      dispatch({ type: "isEditing", payload: false });
     } catch (e) {
       console.log(e);
     }
@@ -153,8 +153,7 @@ const CardEdit = ({ data, setIsEdit, setResult }) => {
         size="large"
         onClick={(e) => {
           e.preventDefault();
-          saveEdit();
-          setIsEdit(false);
+          handleSave();
         }}
       >
         Salvar
@@ -166,6 +165,7 @@ const CardEdit = ({ data, setIsEdit, setResult }) => {
         size="large"
         onClick={(e) => {
           e.preventDefault();
+          dispatch({ type: "isEditing", payload: false });
         }}
       >
         Cancelar

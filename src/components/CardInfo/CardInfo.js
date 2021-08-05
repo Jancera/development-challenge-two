@@ -9,7 +9,7 @@ import {
 import aws from "../../api/aws";
 import useStyle from "./cardInfoStyles";
 
-const CardInfo = ({ data, setIsEdit }) => {
+const CardInfo = ({ data, dispatch }) => {
   const classes = useStyle();
 
   const RedButton = withStyles((theme) => ({
@@ -22,8 +22,10 @@ const CardInfo = ({ data, setIsEdit }) => {
     },
   }))(Button);
 
-  const deleteUser = (id) => {
-    const response = await aws.delete(`/delete`);
+  const deleteUser = async (id) => {
+    await aws.delete(`/${id}`);
+    dispatch({ type: "setData", payload: {} });
+    dispatch({ type: "isSearching", payload: true });
   };
 
   return (
@@ -59,7 +61,10 @@ const CardInfo = ({ data, setIsEdit }) => {
               color="secondary"
               onClick={(e) => {
                 e.preventDefault();
-                setIsEdit(true);
+                dispatch({
+                  type: "isEditing",
+                  payload: true,
+                });
               }}
             >
               Editar
@@ -69,6 +74,7 @@ const CardInfo = ({ data, setIsEdit }) => {
               variant="contained"
               onClick={(e) => {
                 e.preventDefault();
+                deleteUser(data.id);
               }}
             >
               Apagar
@@ -81,6 +87,10 @@ const CardInfo = ({ data, setIsEdit }) => {
         variant="outlined"
         color="secondary"
         size="large"
+        onClick={(e) => {
+          e.preventDefault();
+          dispatch({ type: "isSearching", payload: true });
+        }}
       >
         Pesquisar novamente
       </Button>

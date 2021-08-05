@@ -1,12 +1,9 @@
-import { useState } from "react";
+import { useState, useReducer } from "react";
 import {
   TextField,
   Container,
   Typography,
   Button,
-  Card,
-  CardContent,
-  CardActions,
   CircularProgress,
 } from "@material-ui/core";
 import aws from "../../api/aws";
@@ -15,37 +12,84 @@ import searchDrawing from "../../assets/search.svg";
 import CardInfo from "../../components/CardInfo/CardInfo";
 import CardEdit from "../../components/CardEdit/CardEdit";
 
+const reducer = (state, action) => {
+  switch (action.type) {
+    case "isLoading":
+      return { ...state, isLoading: action.payload };
+    case "setData":
+      return { ...state, data: action.payload };
+    case "isEditing":
+      return { ...state, isEditing: action.payload };
+    case "isSearching":
+      return { ...state, isSearching: action.payload };
+    case "err":
+      return { ...state, err: action.payload };
+    default:
+      return state;
+  }
+};
+
+const initialState = {
+  isSearching: true,
+  isEditing: false,
+  isLoading: false,
+  err: false,
+  data: {
+    id: "",
+    patientName: "",
+    lastName: "",
+    motherName: "",
+    fatherName: "",
+    address: "",
+    birthDate: "yyyy-mm-dd",
+  },
+};
+
 const Search = () => {
+  const [state, dispatch] = useReducer(
+    reducer,
+    initialState
+  );
   const [id, setId] = useState("");
-  const [result, setResult] = useState({});
-  const [isSearching, setIsSearching] = useState(true);
-  const [isEdit, setIsEdit] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [err, setErr] = useState(false);
+
   const classes = useStyles();
-  console.log(result);
+
   const getUser = async (user) => {
     try {
-      setIsLoading(true);
+      dispatch({ type: "isLoading", payload: true });
       const response = await aws.get(`/${user}`);
-      setResult(response.data.Item);
-      setIsLoading(false);
-      setIsSearching(false);
+      dispatch({
+        type: "setData",
+        payload: response.data.Item,
+      });
+      dispatch({ type: "isLoading", payload: false });
+      dispatch({ type: "isSearching", payload: false });
+      setId("");
     } catch (e) {
-      setIsLoading(false);
-      setErr(true);
+      dispatch({ type: "isLoading", payload: false });
+      dispatch({ type: "err", payload: true });
       console.log(e);
     }
   };
 
-  let tempData = {
-    id: "1",
-    patientName: "Patient",
-    lastName: "last name",
-    motherName: "mother",
-    fatherName: "father",
-    address: "address",
-    birthDate: "2021-02-02",
+  const addDataIntoCache = async (
+    cacheName,
+    url,
+    response
+  ) => {
+    const cacheStorage = await caches.open(cacheName);
+    const cachedResponse = await cacheStorage.match(url);
+    if (cachedResponse === undefined) {
+      const data = new Response(JSON.stringify([response]));
+      cacheStorage.put(url, data);
+    } else {
+      let value = await cachedResponse.json();
+      value.push(response);
+      cacheStorage.put(
+        url,
+        new Response(JSON.stringify(value))
+      );
+    }
   };
 
   return (
@@ -54,7 +98,7 @@ const Search = () => {
         className={classes.mainContainer}
         maxWidth="sm"
       >
-        {isSearching ? (
+        {state.isSearching ? (
           <>
             <Typography className={classes.text}>
               Para realizar a pesquisa, precisamos do CPF a
@@ -70,7 +114,7 @@ const Search = () => {
                 fullWidth
                 className={classes.input}
                 value={id}
-                error={err}
+                error={state.err}
                 helperText="Erro de conexão"
                 onChange={(event) =>
                   setId(event.target.value)
@@ -83,15 +127,20 @@ const Search = () => {
                   color="secondary"
                   size="large"
                   type="submit"
-                  disabled={isLoading}
+                  disabled={state.isLoading}
                   onClick={(e) => {
                     e.preventDefault();
                     getUser(id);
+                    addDataIntoCache(
+                      "history",
+                      "https://localhost:3000",
+                      { id: id, date: new Date() }
+                    );
                   }}
                 >
                   Pesquisar
                 </Button>
-                {isLoading ? (
+                {state.isLoading ? (
                   <CircularProgress
                     className={classes.circularProgress}
                     size={30}
@@ -100,14 +149,10 @@ const Search = () => {
               </div>
             </form>
           </>
-        ) : isEdit ? (
-          <CardEdit
-            data={result}
-            setIsEdit={setIsEdit}
-            setResult={setResult}
-          />
+        ) : state.isEditing ? (
+          <CardEdit data={state.data} dispatch={dispatch} />
         ) : (
-          <CardInfo data={result} setIsEdit={setIsEdit} />
+          <CardInfo data={state.data} dispatch={dispatch} />
         )}
       </Container>
       <div className={classes.drawingContainer}>

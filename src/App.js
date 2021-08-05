@@ -9,7 +9,6 @@ import {
   createTheme,
   ThemeProvider,
 } from "@material-ui/core/styles";
-import CssBaseline from "@material-ui/core/CssBaseline";
 
 const theme = createTheme({
   palette: {

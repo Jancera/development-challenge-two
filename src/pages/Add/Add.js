@@ -7,10 +7,18 @@ import {
   Grid,
 } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
-import { red } from "@material-ui/core/colors";
 import useStyles from "./addStyles";
+import aws from "../../api/aws";
 
 const Add = () => {
+  const [id, setId] = useState("");
+  const [patientName, setPatientName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [address, setAddress] = useState("");
+  const [motherName, setMotherName] = useState("");
+  const [fatherName, setFatherName] = useState("");
+  const [birthDate, setBirthDate] = useState("yyyy-mm-dd");
+
   const classes = useStyles();
 
   const RedButton = withStyles((theme) => ({
@@ -22,6 +30,32 @@ const Add = () => {
       },
     },
   }))(Button);
+
+  const editedInfo = {
+    id: id,
+    patientName: patientName,
+    lastName: lastName,
+    address: address,
+    motherName: motherName,
+    fatherName: fatherName,
+    birthDate: birthDate,
+  };
+
+  const handleAdd = async () => {
+    try {
+      const response = await aws.post("/add", editedInfo);
+      console.log(response);
+      setId("");
+      setPatientName("");
+      setLastName("");
+      setAddress("");
+      setMotherName("");
+      setFatherName("");
+      setBirthDate("");
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   return (
     <Container maxWidth="sm">
@@ -38,6 +72,8 @@ const Add = () => {
           color="secondary"
           required
           fullWidth
+          value={id}
+          onChange={(value) => setId(value.target.value)}
         />
         <TextField
           className={classes.input}
@@ -47,6 +83,10 @@ const Add = () => {
           color="secondary"
           required
           fullWidth
+          value={patientName}
+          onChange={(value) =>
+            setPatientName(value.target.value)
+          }
         />
         <TextField
           className={classes.input}
@@ -56,6 +96,10 @@ const Add = () => {
           color="secondary"
           required
           fullWidth
+          value={lastName}
+          onChange={(value) =>
+            setLastName(value.target.value)
+          }
         />
         <TextField
           className={classes.input}
@@ -65,14 +109,22 @@ const Add = () => {
           color="secondary"
           required
           fullWidth
+          value={address}
+          onChange={(value) =>
+            setAddress(value.target.value)
+          }
         />
         <TextField
           className={classes.input}
           label="Nome da mãe"
           variant="outlined"
-          placeholder="xxx.xxx.xxx-xx"
+          placeholder="Nome da mãe"
           color="secondary"
           fullWidth
+          value={motherName}
+          onChange={(value) =>
+            setMotherName(value.target.value)
+          }
         />
         <TextField
           className={classes.input}
@@ -81,6 +133,10 @@ const Add = () => {
           placeholder="xxx.xxx.xxx-xx"
           color="secondary"
           fullWidth
+          value={fatherName}
+          onChange={(value) =>
+            setFatherName(value.target.value)
+          }
         />
         <TextField
           className={classes.input}
@@ -94,7 +150,10 @@ const Add = () => {
           }}
           error={false}
           helperText="Data de nascimento"
-          onChange={(text) => {}}
+          value={birthDate}
+          onChange={(value) =>
+            setBirthDate(value.target.value)
+          }
         />
       </div>
 
@@ -110,7 +169,10 @@ const Add = () => {
             color="secondary"
             size="large"
             type="submit"
-            onClick={() => console.log()}
+            onClick={(e) => {
+              e.preventDefault();
+              handleAdd();
+            }}
           >
             Adicionar
           </Button>
