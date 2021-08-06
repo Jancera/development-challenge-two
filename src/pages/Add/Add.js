@@ -5,34 +5,28 @@ import {
   Button,
   Typography,
   Grid,
+  CircularProgress,
 } from "@material-ui/core";
-import { withStyles } from "@material-ui/core/styles";
-import InputMask from "react-input-mask";
+import RedButton from "../../components/RedButton";
 import useStyles from "./addStyles";
 import aws from "../../api/aws";
+import drawing from "../../assets/add.svg";
 
 const Add = () => {
+  const classes = useStyles();
   const [id, setId] = useState("");
   const [patientName, setPatientName] = useState("");
   const [lastName, setLastName] = useState("");
   const [address, setAddress] = useState("");
   const [motherName, setMotherName] = useState("");
   const [fatherName, setFatherName] = useState("");
-  const [birthDate, setBirthDate] = useState("yyyy-mm-dd");
-
-  const classes = useStyles();
-
-  const RedButton = withStyles((theme) => ({
-    root: {
-      color: theme.palette.getContrastText("#ff3d00"),
-      backgroundColor: "#ff3d00",
-      "&:hover": {
-        backgroundColor: "#8c2200",
-      },
-    },
-  }))(Button);
-
-  const editedInfo = {
+  const [birthDate, setBirthDate] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [cpfError, setCpfError] = useState(false);
+  const [showSuccessMessage, setShowSuccessMessage] =
+    useState(false);
+  const newData = {
     id: id,
     patientName: patientName,
     lastName: lastName,
@@ -43,45 +37,64 @@ const Add = () => {
   };
 
   const handleAdd = async () => {
-    try {
-      const response = await aws.post("/add", editedInfo);
-      console.log(response);
-      setId("");
-      setPatientName("");
-      setLastName("");
-      setAddress("");
-      setMotherName("");
-      setFatherName("");
-      setBirthDate("");
-    } catch (e) {
-      console.log(e);
+    if (id.length !== 11) {
+      setCpfError(true);
+      setErrorMessage("CPF precisa ter 11 caracteres");
+    } else {
+      try {
+        setCpfError(false);
+        setIsLoading(true);
+        await aws.put("/add", newData);
+        setId("");
+        setPatientName("");
+        setLastName("");
+        setAddress("");
+        setMotherName("");
+        setFatherName("");
+        setBirthDate("");
+        setErrorMessage("");
+        setIsLoading(false);
+        setShowSuccessMessage(true);
+        setTimeout(
+          () => setShowSuccessMessage(false),
+          2000
+        );
+      } catch (e) {
+        setIsLoading(false);
+        if (e.response.status === 400) {
+          setErrorMessage(e.response.data.message);
+        } else {
+          setErrorMessage("Internal Server Error");
+        }
+      }
     }
   };
 
   return (
     <div className={classes.container}>
+      <div className={classes.drawingContainer}>
+        <img
+          className={classes.addDrawing}
+          src={drawing}
+          alt="Adicionar"
+        />
+      </div>
       <Container maxWidth="sm">
         <Typography className={classes.text}>
           Preencha as informações para adicionar ao nosso
           sistema.
         </Typography>
         <div className={classes.inputContainer}>
-          <InputMask
-            mask="999.999.999-99"
+          <TextField
+            className={classes.input}
+            label="CPF"
+            color="secondary"
+            variant="outlined"
+            fullWidth
             value={id}
             onChange={(value) => setId(value.target.value)}
-          >
-            {() => (
-              <TextField
-                className={classes.input}
-                label="CPF"
-                color="secondary"
-                variant="outlined"
-                fullWidth
-                required
-              />
-            )}
-          </InputMask>
+            error={cpfError}
+          />
 
           <TextField
             className={classes.input}
@@ -89,7 +102,6 @@ const Add = () => {
             variant="outlined"
             placeholder="Nome"
             color="secondary"
-            required
             fullWidth
             value={patientName}
             onChange={(value) =>
@@ -102,7 +114,6 @@ const Add = () => {
             variant="outlined"
             placeholder="Sobrenome"
             color="secondary"
-            required
             fullWidth
             value={lastName}
             onChange={(value) =>
@@ -115,7 +126,6 @@ const Add = () => {
             variant="outlined"
             placeholder="Endereço"
             color="secondary"
-            required
             fullWidth
             value={address}
             onChange={(value) =>
@@ -151,7 +161,6 @@ const Add = () => {
             label="Data de nascimento"
             color="secondary"
             type="date"
-            required
             fullWidth
             InputLabelProps={{
               shrink: true,
@@ -163,6 +172,21 @@ const Add = () => {
               setBirthDate(value.target.value)
             }
           />
+
+          <Typography
+            className={classes.errorMessage}
+            align="center"
+          >
+            {errorMessage}
+          </Typography>
+          {showSuccessMessage ? (
+            <Typography
+              className={classes.successMessage}
+              align="center"
+            >
+              Paciente adicionado
+            </Typography>
+          ) : null}
         </div>
 
         <Grid
@@ -171,19 +195,27 @@ const Add = () => {
           spacing={5}
         >
           <Grid item>
-            <Button
-              className={classes.button}
-              variant="contained"
-              color="secondary"
-              size="large"
-              type="submit"
-              onClick={(e) => {
-                e.preventDefault();
-                handleAdd();
-              }}
-            >
-              Adicionar
-            </Button>
+            <div className={classes.buttonContainer}>
+              <Button
+                variant="contained"
+                color="secondary"
+                size="large"
+                type="submit"
+                disabled={isLoading}
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleAdd();
+                }}
+              >
+                Adicionar
+              </Button>
+              {isLoading ? (
+                <CircularProgress
+                  className={classes.circularProgress}
+                  size={30}
+                />
+              ) : null}
+            </div>
           </Grid>
           <Grid item>
             <RedButton

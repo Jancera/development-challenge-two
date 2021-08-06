@@ -24,6 +24,16 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     justifyContent: "flex-end",
   },
+  progressContainer: {
+    justifyContent: "center",
+    display: "flex",
+  },
+  error: {
+    color: "red",
+  },
+  circularProgress: {
+    color: "#03fc03",
+  },
 }));
 
 export default useStyles;

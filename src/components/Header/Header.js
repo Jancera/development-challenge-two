@@ -1,22 +1,22 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useLocation, useHistory } from "react-router-dom";
 import AppBar from "@material-ui/core/AppBar";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
-import logo from "../assets/medcloud.svg";
+import logo from "../../assets/medcloud.svg";
 import useStyles from "./headerStyles";
 
 const Header = () => {
   const classes = useStyles();
   const [value, setValue] = useState(0);
+  const navigate = (route) => history.push(route);
+  const location = useLocation();
+  const history = useHistory();
 
   const handleChange = (_, newValue) => {
     setValue(newValue);
   };
 
-  const navigate = (route) => history.push(route);
-
-  const location = useLocation();
   useEffect(() => {
     if (location.pathname === "/") {
       setValue(0);
@@ -28,8 +28,6 @@ const Header = () => {
       setValue(3);
     }
   }, [location]);
-
-  const history = useHistory();
 
   return (
     <AppBar
@@ -44,7 +42,7 @@ const Header = () => {
         textColor="secondary"
       >
         <Tab
-          label="Home"
+          label="Início"
           disableRipple
           onClick={() => navigate("/")}
         />

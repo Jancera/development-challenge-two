@@ -11,6 +11,7 @@ import useStyles from "./homeStyles";
 const Home = () => {
   const classes = useStyles();
   const history = useHistory();
+
   return (
     <div className={classes.container}>
       <Container maxWidth="lg">

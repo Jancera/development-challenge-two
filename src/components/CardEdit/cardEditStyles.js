@@ -1,21 +1,22 @@
 import { makeStyles } from "@material-ui/core";
 
 const useStyles = makeStyles({
-  inputContainer: {
-    margin: "0px 20px",
-  },
   input: {
     margin: "0.5em 0em",
   },
-  text: {
-    fontSize: "20px",
-    marginTop: "20px",
-  },
   buttonContainer: {
-    marginTop: "1em",
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
   },
   button: {
     margin: "1em 2em",
+    width: "100%",
+  },
+  circularProgress: {
+    position: "absolute",
+    color: "#03fc03",
   },
   errorMessage: {
     color: "red",

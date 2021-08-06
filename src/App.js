@@ -1,5 +1,5 @@
 import { Route, Switch } from "react-router-dom";
-import Header from "./components/Header";
+import Header from "./components/Header/Header";
 import Home from "./pages/Home/Home";
 import Search from "./pages/Search/Search";
 import Add from "./pages/Add/Add";
@@ -13,15 +13,11 @@ import {
 const theme = createTheme({
   palette: {
     primary: {
-      light: "#757ce8",
       main: "#fff",
-      dark: "#002884",
       contrastText: "#000",
     },
     secondary: {
-      light: "#ff7961",
       main: "#009adf",
-      dark: "#0086c4",
       contrastText: "#fff",
     },
   },

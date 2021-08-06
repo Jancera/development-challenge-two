@@ -5,34 +5,31 @@ import {
   Card,
   CardContent,
   CardActions,
-  withStyles,
+  CircularProgress,
 } from "@material-ui/core";
+import RedButton from "../RedButton";
 import aws from "../../api/aws";
 import useStyle from "./cardInfoStyles";
 
 const CardInfo = ({ data, dispatch }) => {
-  const [errMessage, setErrMessage] = useState("");
   const classes = useStyle();
+  const [errMessage, setErrMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
-  const RedButton = withStyles((theme) => ({
-    root: {
-      color: theme.palette.getContrastText("#ff3d00"),
-      backgroundColor: "#ff3d00",
-      "&:hover": {
-        backgroundColor: "#8c2200",
-      },
-    },
-  }))(Button);
-
-  const deleteUser = async (id) => {
+  const deleteUser = async (user) => {
     try {
-      await aws.delete(`/${id}`);
+      setIsLoading(true);
+      await aws.delete(`/${user}`);
       dispatch({ type: "setData", payload: {} });
       dispatch({ type: "isSearching", payload: true });
+      setIsLoading(false);
       setErrMessage("");
     } catch (e) {
       if (e) {
-        setErrMessage("Erro ao deletar usuário");
+        setIsLoading(false);
+        if (e.response.status === 404) {
+          setErrMessage(e.response.data.message);
+        }
       }
     }
   };
@@ -77,16 +74,26 @@ const CardInfo = ({ data, dispatch }) => {
           >
             Editar
           </Button>
-          <RedButton
-            color="secondary"
-            variant="contained"
-            onClick={(e) => {
-              e.preventDefault();
-              deleteUser(data.id);
-            }}
-          >
-            Apagar
-          </RedButton>
+
+          <div className={classes.buttonContainer}>
+            <RedButton
+              color="secondary"
+              variant="contained"
+              disabled={isLoading}
+              onClick={(e) => {
+                e.preventDefault();
+                deleteUser(data.id);
+              }}
+            >
+              Apagar
+            </RedButton>
+            {isLoading ? (
+              <CircularProgress
+                className={classes.circularProgress}
+                size={30}
+              />
+            ) : null}
+          </div>
         </CardActions>
         <Typography
           component="h2"
@@ -97,7 +104,7 @@ const CardInfo = ({ data, dispatch }) => {
       </Card>
       <Button
         className={classes.button}
-        variant="outlined"
+        variant="contained"
         color="secondary"
         size="large"
         onClick={(e) => {

@@ -1,14 +1,14 @@
 import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
-  container: {
+  mainContainer: {
     backgroundColor: "#fafafa",
     height: "90vh",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
   },
-  mainContainer: {
+  container: {
     display: "flex",
     flexDirection: "column",
     marginTop: "-10em",
@@ -25,8 +25,18 @@ const useStyles = makeStyles((theme) => ({
   input: {
     margin: "2em 0em",
   },
+  buttonContainer: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+  },
   button: {
     margin: "0em 2em",
+  },
+  circularProgress: {
+    position: "absolute",
+    color: "#03fc03",
   },
   drawingContainer: {
     position: "absolute",
@@ -41,16 +51,6 @@ const useStyles = makeStyles((theme) => ({
     minWidth: "200px",
     width: "100%",
     opacity: "0.6",
-  },
-  circularProgress: {
-    position: "absolute",
-    color: "#03fc03",
-  },
-  buttonContainer: {
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
   },
 }));
 

@@ -31,8 +31,6 @@ const useStyles = makeStyles({
     maxWidth: "600px",
     minWidth: "300px",
     width: "100%",
-    backgroundSize: "cover",
-    backgroundPosition: "center",
   },
 });
 export default useStyles;

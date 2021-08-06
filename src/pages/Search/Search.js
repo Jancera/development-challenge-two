@@ -7,83 +7,56 @@ import {
   CircularProgress,
 } from "@material-ui/core";
 import aws from "../../api/aws";
+import { reducer, initialState } from "./searchReducer";
 import useStyles from "./searchStyles";
 import searchDrawing from "../../assets/search.svg";
 import CardInfo from "../../components/CardInfo/CardInfo";
 import CardEdit from "../../components/CardEdit/CardEdit";
 
-const reducer = (state, action) => {
-  switch (action.type) {
-    case "isLoading":
-      return { ...state, isLoading: action.payload };
-    case "setData":
-      return { ...state, data: action.payload };
-    case "isEditing":
-      return { ...state, isEditing: action.payload };
-    case "isSearching":
-      return { ...state, isSearching: action.payload };
-    case "err":
-      return { ...state, err: action.payload };
-    case "errMessage":
-      return { ...state, errMessage: action.payload };
-    default:
-      return state;
-  }
-};
-
-const initialState = {
-  isSearching: true,
-  isEditing: false,
-  isLoading: false,
-  err: false,
-  errMessage: "",
-  data: {
-    id: "",
-    patientName: "",
-    lastName: "",
-    motherName: "",
-    fatherName: "",
-    address: "",
-    birthDate: "yyyy-mm-dd",
-  },
-};
-
 const Search = () => {
+  const classes = useStyles();
+  const [id, setId] = useState("");
   const [state, dispatch] = useReducer(
     reducer,
     initialState
   );
-  const [id, setId] = useState("");
-
-  const classes = useStyles();
 
   const getUser = async (user) => {
-    try {
-      dispatch({ type: "isLoading", payload: true });
-      const response = await aws.get(`/${user}`);
+    if (user.length !== 11) {
+      dispatch({ type: "err", payload: true });
       dispatch({
-        type: "setData",
-        payload: response.data.Item,
+        type: "errMessage",
+        payload: "CPF precisa ter 11 caracteres",
       });
-      dispatch({ type: "isLoading", payload: false });
-      dispatch({ type: "isSearching", payload: false });
-      dispatch({ type: "err", payload: false });
-      dispatch({ type: "errMessage", payload: "" });
-      setId("");
-    } catch (e) {
-      dispatch({ type: "isLoading", payload: false });
-      if (e.response.data.statusCode === 404) {
-        dispatch({ type: "err", payload: true });
+    } else {
+      try {
+        dispatch({ type: "isLoading", payload: true });
+        const response = await aws.get(`/${user}`);
         dispatch({
-          type: "errMessage",
-          payload: "Usuário já existe",
+          type: "setData",
+          payload: response.data.Item,
         });
-      } else {
-        dispatch({ type: "err", payload: true });
-        dispatch({
-          type: "errMessage",
-          payload: "Internal Error",
-        });
+        dispatch({ type: "isLoading", payload: false });
+        dispatch({ type: "isSearching", payload: false });
+        dispatch({ type: "err", payload: false });
+        dispatch({ type: "errMessage", payload: "" });
+        setId("");
+      } catch (e) {
+        dispatch({ type: "isLoading", payload: false });
+        console.log(e.response);
+        if (e.response.status === 404) {
+          dispatch({ type: "err", payload: true });
+          dispatch({
+            type: "errMessage",
+            payload: e.response.data.message,
+          });
+        } else {
+          dispatch({ type: "err", payload: true });
+          dispatch({
+            type: "errMessage",
+            payload: "Internal Server Error",
+          });
+        }
       }
     }
   };
@@ -100,7 +73,10 @@ const Search = () => {
       cacheStorage.put(url, data);
     } else {
       let value = await cachedResponse.json();
-      value.push(response);
+      value.unshift(response);
+      if (value.length > 10) {
+        value.pop();
+      }
       cacheStorage.put(
         url,
         new Response(JSON.stringify(value))
@@ -109,9 +85,9 @@ const Search = () => {
   };
 
   return (
-    <div className={classes.container}>
+    <div className={classes.mainContainer}>
       <Container
-        className={classes.mainContainer}
+        className={classes.container}
         maxWidth="sm"
       >
         {state.isSearching ? (
@@ -122,20 +98,23 @@ const Search = () => {
             </Typography>
             <form className={classes.form}>
               <TextField
+                className={classes.input}
                 label="CPF"
                 variant="outlined"
-                placeholder="xxx.xxx.xxx-xx"
                 color="secondary"
-                required
                 fullWidth
-                className={classes.input}
-                value={id}
                 error={state.err}
-                helperText={state.err && state.errMessage}
-                onChange={(event) =>
-                  setId(event.target.value)
+                helperText={
+                  state.err
+                    ? state.errMessage
+                    : "11 caracteres, sem pontos e traços "
+                }
+                value={id}
+                onChange={(value) =>
+                  setId(value.target.value)
                 }
               />
+
               <div className={classes.buttonContainer}>
                 <Button
                   className={classes.button}

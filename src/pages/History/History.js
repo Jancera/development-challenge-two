@@ -6,22 +6,23 @@ import {
   ListItemText,
   ListItemIcon,
   ListSubheader,
-  Collapse,
   Modal,
-  Card,
-  CardContent,
   Typography,
+  CircularProgress,
 } from "@material-ui/core";
+import aws from "../../api/aws";
 import PersonIcon from "@material-ui/icons/Person";
 import CloseIcon from "@material-ui/icons/Close";
 import useStyles from "./historyStyles";
 
 const History = () => {
-  const [cHistory, setHistory] = useState({});
-  const [isOpen, setIsOpen] = useState(false);
   const classes = useStyles();
+  const [isOpen, setIsOpen] = useState(false);
+  const [isEmpty, setIsEmpty] = useState(false);
   const [data, setData] = useState([]);
   const [modalInfo, setModalInfo] = useState({});
+  const [isLoading, setIsLoading] = useState(true);
+  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
     const loadHistory = async () => {
@@ -29,11 +30,27 @@ const History = () => {
       const cachedResponse = await cacheStorage.match(
         "https://localhost:3000"
       );
-      let value = await cachedResponse.json();
-      setData(value);
+      if (cachedResponse !== undefined) {
+        let value = await cachedResponse.json();
+        setData(value);
+      } else {
+        setIsEmpty(true);
+      }
     };
     loadHistory();
   }, []);
+
+  const loadModal = async (user) => {
+    try {
+      setIsLoading(true);
+      const response = await aws.get(`/${user}`);
+      setModalInfo(response.data.Item);
+      setIsLoading(false);
+      setErrorMessage("");
+    } catch (e) {
+      setErrorMessage(e.response.data.message);
+    }
+  };
 
   const handleClose = () => {
     setIsOpen(false);
@@ -49,7 +66,9 @@ const History = () => {
               component="div"
               className={classes.subheader}
             >
-              Histórico de pesquisas
+              {isEmpty
+                ? "Nenhum item para mostrar"
+                : "Histórico de pesquisas"}
             </ListSubheader>
           }
         >
@@ -57,29 +76,29 @@ const History = () => {
             return (
               <ListItem
                 className={classes.item}
+                key={index}
                 button
                 onClick={() => {
                   setIsOpen(true);
-                  setModalInfo(item);
+                  loadModal(item.id);
                 }}
               >
                 <ListItemIcon>
                   <PersonIcon />
                 </ListItemIcon>
                 <ListItemText
-                  primary={`CPF : ${item.id}`}
+                  primary={`CPF : ${
+                    item.id
+                  }, pesquisado em ${item.date.slice(
+                    0,
+                    10
+                  )} `}
                 />
-                {/* {open ? <ExpandLess /> : <ExpandMore />} */}
               </ListItem>
             );
           })}
 
-          <Modal
-            open={isOpen}
-            onClose={handleClose}
-            aria-labelledby="simple-modal-title"
-            aria-describedby="simple-modal-description"
-          >
+          <Modal open={isOpen} onClose={handleClose}>
             <Container
               maxWidth="sm"
               className={classes.modalContainer}
@@ -91,27 +110,64 @@ const History = () => {
                   onClick={() => setIsOpen(false)}
                 />
               </div>
-              <Typography variant="h5" component="h1">
-                CPF : {modalInfo.id}
-              </Typography>
-              <Typography component="h2" display="block">
-                Nome : {modalInfo.patientName}
-              </Typography>
-              <Typography component="h2" display="block">
-                Sobrenome : {modalInfo.lastName}
-              </Typography>
-              <Typography component="h2" display="block">
-                Endereço : {modalInfo.address}
-              </Typography>
-              <Typography component="h2" display="block">
-                Nome da mãe : {modalInfo.motherName}
-              </Typography>
-              <Typography component="h2" display="block">
-                Nome do pai : {modalInfo.fatherName}
-              </Typography>
-              <Typography component="h2" display="block">
-                Data de Nascimento : {modalInfo.birthDate}
-              </Typography>
+
+              {isLoading ? (
+                <div className={classes.progressContainer}>
+                  {errorMessage !== "" ? (
+                    <Typography className={classes.error}>
+                      {errorMessage}
+                    </Typography>
+                  ) : (
+                    <CircularProgress
+                      className={classes.circularProgress}
+                      size={100}
+                    />
+                  )}
+                </div>
+              ) : (
+                <>
+                  <Typography variant="h5" component="h1">
+                    CPF : {modalInfo.id}
+                  </Typography>
+                  <Typography
+                    component="h2"
+                    display="block"
+                  >
+                    Nome : {modalInfo.patientName}
+                  </Typography>
+                  <Typography
+                    component="h2"
+                    display="block"
+                  >
+                    Sobrenome : {modalInfo.lastName}
+                  </Typography>
+                  <Typography
+                    component="h2"
+                    display="block"
+                  >
+                    Endereço : {modalInfo.address}
+                  </Typography>
+                  <Typography
+                    component="h2"
+                    display="block"
+                  >
+                    Nome da mãe : {modalInfo.motherName}
+                  </Typography>
+                  <Typography
+                    component="h2"
+                    display="block"
+                  >
+                    Nome do pai : {modalInfo.fatherName}
+                  </Typography>
+                  <Typography
+                    component="h2"
+                    display="block"
+                  >
+                    Data de Nascimento :{" "}
+                    {modalInfo.birthDate}
+                  </Typography>
+                </>
+              )}
             </Container>
           </Modal>
         </List>

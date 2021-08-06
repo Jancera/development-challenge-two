@@ -2,13 +2,15 @@ import { useState } from "react";
 import {
   TextField,
   Button,
-  withStyles,
   Typography,
+  CircularProgress,
 } from "@material-ui/core";
+import RedButton from "../RedButton";
 import aws from "../../api/aws";
 import useStyles from "./cardEditStyles";
 
 const CardEdit = ({ data, dispatch }) => {
+  const classes = useStyles();
   const [patientName, setPatientName] = useState(
     data.patientName
   );
@@ -23,21 +25,10 @@ const CardEdit = ({ data, dispatch }) => {
   const [birthDate, setBirthDate] = useState(
     data.birthDate
   );
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
-  const [errorMessage, setErrorMessage] = useState("sadf");
-  const classes = useStyles();
-
-  const RedButton = withStyles((theme) => ({
-    root: {
-      color: theme.palette.getContrastText("#ff3d00"),
-      backgroundColor: "#ff3d00",
-      "&:hover": {
-        backgroundColor: "#8c2200",
-      },
-    },
-  }))(Button);
-
-  const editedInfo = {
+  const newData = {
     id: data.id,
     patientName: patientName,
     lastName: lastName,
@@ -49,12 +40,19 @@ const CardEdit = ({ data, dispatch }) => {
 
   const handleSave = async () => {
     try {
-      await aws.patch("/edit", editedInfo);
-      dispatch({ type: "setData", payload: editedInfo });
+      setIsLoading(true);
+      await aws.patch("/edit", newData);
+      dispatch({ type: "setData", payload: newData });
       dispatch({ type: "isEditing", payload: false });
+      setIsLoading(false);
       setErrorMessage("");
     } catch (e) {
-      setErrorMessage("Erro ao salvar edição");
+      setIsLoading(false);
+      if (e.response.status === 400) {
+        setErrorMessage(e.response.data.message);
+      } else {
+        setErrorMessage("Internal Server Error");
+      }
     }
   };
 
@@ -66,13 +64,12 @@ const CardEdit = ({ data, dispatch }) => {
         variant="outlined"
         placeholder="xxx.xxx.xxx-xx"
         color="secondary"
-        required
         fullWidth
         InputLabelProps={{
           shrink: true,
         }}
-        disabled
         value={data.id}
+        disabled
       />
       <TextField
         className={classes.input}
@@ -80,7 +77,6 @@ const CardEdit = ({ data, dispatch }) => {
         variant="outlined"
         placeholder="Nome"
         color="secondary"
-        required
         fullWidth
         value={patientName}
         onChange={(value) =>
@@ -93,7 +89,6 @@ const CardEdit = ({ data, dispatch }) => {
         variant="outlined"
         placeholder="Sobrenome"
         color="secondary"
-        required
         fullWidth
         value={lastName}
         onChange={(value) =>
@@ -106,7 +101,6 @@ const CardEdit = ({ data, dispatch }) => {
         variant="outlined"
         placeholder="Endereço"
         color="secondary"
-        required
         fullWidth
         value={address}
         onChange={(value) => setAddress(value.target.value)}
@@ -140,7 +134,6 @@ const CardEdit = ({ data, dispatch }) => {
         label="Data de nascimento"
         color="secondary"
         type="date"
-        required
         fullWidth
         InputLabelProps={{
           shrink: true,
@@ -150,36 +143,50 @@ const CardEdit = ({ data, dispatch }) => {
           setBirthDate(value.target.value)
         }
       />
-      <Button
-        className={classes.button}
-        variant="contained"
-        color="secondary"
-        size="large"
-        onClick={(e) => {
-          e.preventDefault();
-          handleSave();
-        }}
-      >
-        Salvar
-      </Button>
+
+      <div className={classes.buttonContainer}>
+        <Button
+          className={classes.button}
+          variant="contained"
+          color="secondary"
+          size="large"
+          disabled={isLoading}
+          onClick={(e) => {
+            e.preventDefault();
+            handleSave();
+          }}
+        >
+          Salvar
+        </Button>
+        {isLoading ? (
+          <CircularProgress
+            className={classes.circularProgress}
+            size={30}
+          />
+        ) : null}
+      </div>
+
       <Typography
         className={classes.errorMessage}
         align="center"
       >
         {errorMessage}
       </Typography>
-      <RedButton
-        className={classes.button}
-        variant="contained"
-        color="secondary"
-        size="large"
-        onClick={(e) => {
-          e.preventDefault();
-          dispatch({ type: "isEditing", payload: false });
-        }}
-      >
-        Cancelar
-      </RedButton>
+
+      <div className={classes.buttonContainer}>
+        <RedButton
+          className={classes.button}
+          variant="contained"
+          color="secondary"
+          size="large"
+          onClick={(e) => {
+            e.preventDefault();
+            dispatch({ type: "isEditing", payload: false });
+          }}
+        >
+          Cancelar
+        </RedButton>
+      </div>
     </>
   );
 };

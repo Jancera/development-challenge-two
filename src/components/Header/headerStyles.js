@@ -13,12 +13,6 @@ const useStyles = makeStyles({
     width: "100%",
     marginRight: "5em",
   },
-  button: {
-    height: "10px",
-    marginBottom: "10px",
-    border: 0,
-    background: "none",
-  },
 });
 
 export default useStyles;
