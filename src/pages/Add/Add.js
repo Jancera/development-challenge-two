@@ -148,7 +148,7 @@ const Add = () => {
             className={classes.input}
             label="Nome do pai"
             variant="outlined"
-            placeholder="xxx.xxx.xxx-xx"
+            placeholder="Nome do pai"
             color="secondary"
             fullWidth
             value={fatherName}

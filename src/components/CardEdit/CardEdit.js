@@ -109,7 +109,7 @@ const CardEdit = ({ data, dispatch }) => {
         className={classes.input}
         label="Nome da mãe"
         variant="outlined"
-        placeholder="xxx.xxx.xxx-xx"
+        placeholder="Nome da mãe"
         color="secondary"
         fullWidth
         value={motherName}
@@ -121,7 +121,7 @@ const CardEdit = ({ data, dispatch }) => {
         className={classes.input}
         label="Nome do pai"
         variant="outlined"
-        placeholder="xxx.xxx.xxx-xx"
+        placeholder="Nome do pai"
         color="secondary"
         fullWidth
         value={fatherName}
