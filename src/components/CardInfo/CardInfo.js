@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   Typography,
   Button,
@@ -10,6 +11,7 @@ import aws from "../../api/aws";
 import useStyle from "./cardInfoStyles";
 
 const CardInfo = ({ data, dispatch }) => {
+  const [errMessage, setErrMessage] = useState("");
   const classes = useStyle();
 
   const RedButton = withStyles((theme) => ({
@@ -23,64 +25,75 @@ const CardInfo = ({ data, dispatch }) => {
   }))(Button);
 
   const deleteUser = async (id) => {
-    await aws.delete(`/${id}`);
-    dispatch({ type: "setData", payload: {} });
-    dispatch({ type: "isSearching", payload: true });
+    try {
+      await aws.delete(`/${id}`);
+      dispatch({ type: "setData", payload: {} });
+      dispatch({ type: "isSearching", payload: true });
+      setErrMessage("");
+    } catch (e) {
+      if (e) {
+        setErrMessage("Erro ao deletar usuário");
+      }
+    }
   };
 
   return (
     <>
       <Card className={classes.card}>
-        <div>
-          <CardContent>
-            <Typography variant="h5" component="h1">
-              CPF : {data.id}
-            </Typography>
-            <Typography component="h2" display="block">
-              Nome : {data.patientName}
-            </Typography>
-            <Typography component="h2" display="block">
-              Sobrenome : {data.lastName}
-            </Typography>
-            <Typography component="h2" display="block">
-              Endereço : {data.address}
-            </Typography>
-            <Typography component="h2" display="block">
-              Nome da mãe : {data.motherName}
-            </Typography>
-            <Typography component="h2" display="block">
-              Nome do pai : {data.fatherName}
-            </Typography>
-            <Typography component="h2" display="block">
-              Data de Nascimento : {data.birthDate}
-            </Typography>
-          </CardContent>
-          <CardActions>
-            <Button
-              variant="contained"
-              color="secondary"
-              onClick={(e) => {
-                e.preventDefault();
-                dispatch({
-                  type: "isEditing",
-                  payload: true,
-                });
-              }}
-            >
-              Editar
-            </Button>
-            <RedButton
-              color="secondary"
-              variant="contained"
-              onClick={(e) => {
-                e.preventDefault();
-                deleteUser(data.id);
-              }}
-            >
-              Apagar
-            </RedButton>
-          </CardActions>
-        </div>
+        <CardContent>
+          <Typography variant="h5" component="h1">
+            CPF : {data.id}
+          </Typography>
+          <Typography component="h2">
+            Nome : {data.patientName}
+          </Typography>
+          <Typography component="h2">
+            Sobrenome : {data.lastName}
+          </Typography>
+          <Typography component="h2">
+            Endereço : {data.address}
+          </Typography>
+          <Typography component="h2">
+            Nome da mãe : {data.motherName}
+          </Typography>
+          <Typography component="h2">
+            Nome do pai : {data.fatherName}
+          </Typography>
+          <Typography component="h2">
+            Data de Nascimento : {data.birthDate}
+          </Typography>
+        </CardContent>
+        <CardActions>
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={(e) => {
+              e.preventDefault();
+              dispatch({
+                type: "isEditing",
+                payload: true,
+              });
+            }}
+          >
+            Editar
+          </Button>
+          <RedButton
+            color="secondary"
+            variant="contained"
+            onClick={(e) => {
+              e.preventDefault();
+              deleteUser(data.id);
+            }}
+          >
+            Apagar
+          </RedButton>
+        </CardActions>
+        <Typography
+          component="h2"
+          className={classes.errorMessage}
+        >
+          {errMessage}
+        </Typography>
       </Card>
       <Button
         className={classes.button}

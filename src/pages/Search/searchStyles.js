@@ -5,12 +5,13 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: "#fafafa",
     height: "90vh",
     display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
   },
   mainContainer: {
-    height: "100%",
     display: "flex",
     flexDirection: "column",
-    marginTop: "10em",
+    marginTop: "-10em",
     zIndex: 1,
   },
   text: {
@@ -40,23 +41,6 @@ const useStyles = makeStyles((theme) => ({
     minWidth: "200px",
     width: "100%",
     opacity: "0.6",
-
-    //marginRight: "300px",
-  },
-  "@global": {
-    "@keyframes fadeIn": {
-      "0%": {
-        opacity: 0,
-        transform: "translateX(5rem)",
-      },
-      "100%": {
-        opacity: 0.8,
-        transform: "translateX(0)",
-      },
-    },
-  },
-  selector: {
-    animation: "fadeIn 1s ease-in-out", // --> this works
   },
   circularProgress: {
     position: "absolute",

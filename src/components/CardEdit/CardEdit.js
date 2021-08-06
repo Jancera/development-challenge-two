@@ -3,6 +3,7 @@ import {
   TextField,
   Button,
   withStyles,
+  Typography,
 } from "@material-ui/core";
 import aws from "../../api/aws";
 import useStyles from "./cardEditStyles";
@@ -22,6 +23,8 @@ const CardEdit = ({ data, dispatch }) => {
   const [birthDate, setBirthDate] = useState(
     data.birthDate
   );
+
+  const [errorMessage, setErrorMessage] = useState("sadf");
   const classes = useStyles();
 
   const RedButton = withStyles((theme) => ({
@@ -49,8 +52,9 @@ const CardEdit = ({ data, dispatch }) => {
       await aws.patch("/edit", editedInfo);
       dispatch({ type: "setData", payload: editedInfo });
       dispatch({ type: "isEditing", payload: false });
+      setErrorMessage("");
     } catch (e) {
-      console.log(e);
+      setErrorMessage("Erro ao salvar edição");
     }
   };
 
@@ -158,6 +162,12 @@ const CardEdit = ({ data, dispatch }) => {
       >
         Salvar
       </Button>
+      <Typography
+        className={classes.errorMessage}
+        align="center"
+      >
+        {errorMessage}
+      </Typography>
       <RedButton
         className={classes.button}
         variant="contained"

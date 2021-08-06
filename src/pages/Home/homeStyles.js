@@ -2,8 +2,17 @@ import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles({
   container: {
+    backgroundColor: "#fafafa",
     justifyContent: "center",
     alignItems: "center",
+    height: "90vh",
+    display: "flex",
+  },
+  grid: {
+    marginTop: "-10em",
+    justifyContent: "center",
+    alignItems: "center",
+    height: "100%",
   },
   smallText: {
     fontSize: "18px",

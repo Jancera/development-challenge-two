@@ -7,6 +7,9 @@ const useStyle = makeStyles({
   card: {
     backgroundColor: "rgba(0,0,0,0.05)",
   },
+  errorMessage: {
+    color: "red",
+  },
 });
 
 export default useStyle;

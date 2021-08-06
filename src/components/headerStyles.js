@@ -19,15 +19,6 @@ const useStyles = makeStyles({
     border: 0,
     background: "none",
   },
-  navbar: {
-    display: "flex",
-    placeContent: "space-between",
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundSize: "auto",
-    padding: "10px 10%",
-    backgroundColor: "#f5f5f5",
-  },
 });
 
 export default useStyles;

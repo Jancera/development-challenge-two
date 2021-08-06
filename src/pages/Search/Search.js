@@ -24,6 +24,8 @@ const reducer = (state, action) => {
       return { ...state, isSearching: action.payload };
     case "err":
       return { ...state, err: action.payload };
+    case "errMessage":
+      return { ...state, errMessage: action.payload };
     default:
       return state;
   }
@@ -34,6 +36,7 @@ const initialState = {
   isEditing: false,
   isLoading: false,
   err: false,
+  errMessage: "",
   data: {
     id: "",
     patientName: "",
@@ -64,11 +67,24 @@ const Search = () => {
       });
       dispatch({ type: "isLoading", payload: false });
       dispatch({ type: "isSearching", payload: false });
+      dispatch({ type: "err", payload: false });
+      dispatch({ type: "errMessage", payload: "" });
       setId("");
     } catch (e) {
       dispatch({ type: "isLoading", payload: false });
-      dispatch({ type: "err", payload: true });
-      console.log(e);
+      if (e.response.data.statusCode === 404) {
+        dispatch({ type: "err", payload: true });
+        dispatch({
+          type: "errMessage",
+          payload: "Usuário já existe",
+        });
+      } else {
+        dispatch({ type: "err", payload: true });
+        dispatch({
+          type: "errMessage",
+          payload: "Internal Error",
+        });
+      }
     }
   };
 
@@ -115,7 +131,7 @@ const Search = () => {
                 className={classes.input}
                 value={id}
                 error={state.err}
-                helperText="Erro de conexão"
+                helperText={state.err && state.errMessage}
                 onChange={(event) =>
                   setId(event.target.value)
                 }

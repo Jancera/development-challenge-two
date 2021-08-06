@@ -17,6 +17,9 @@ const useStyles = makeStyles({
   button: {
     margin: "1em 2em",
   },
+  errorMessage: {
+    color: "red",
+  },
 });
 
 export default useStyles;

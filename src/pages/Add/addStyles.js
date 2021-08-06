@@ -1,6 +1,11 @@
 import { makeStyles } from "@material-ui/core";
 
 const useStyles = makeStyles({
+  container: {
+    backgroundColor: "#fafafa",
+    height: "90vh",
+    display: "flex",
+  },
   inputContainer: {
     margin: "0px 20px",
   },
@@ -9,7 +14,7 @@ const useStyles = makeStyles({
   },
   text: {
     fontSize: "20px",
-    marginTop: "20px",
+    margin: "30px 0px",
   },
   buttonContainer: {
     marginTop: "1em",
