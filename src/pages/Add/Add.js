@@ -79,7 +79,10 @@ const Add = () => {
           alt="Adicionar"
         />
       </div>
-      <Container maxWidth="sm">
+      <Container
+        className={classes.formContainer}
+        maxWidth="sm"
+      >
         <Typography className={classes.text}>
           Preencha as informações para adicionar ao nosso
           sistema.

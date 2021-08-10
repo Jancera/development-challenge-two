@@ -1,10 +1,25 @@
 import { makeStyles } from "@material-ui/core";
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   container: {
+    overflow: "hidden",
     backgroundColor: "#fafafa",
     height: "90vh",
     display: "flex",
+    [theme.breakpoints.between("xs", "md")]: {
+      height: "85vh",
+    },
+    [theme.breakpoints.down("xs")]: {
+      overflow: "visible",
+    },
+  },
+  formContainer: {
+    [theme.breakpoints.between("xs", "md")]: {
+      marginTop: "2em",
+    },
+    [theme.breakpoints.down("xs")]: {
+      marginTop: "0em",
+    },
   },
   drawingContainer: {
     position: "absolute",
@@ -12,13 +27,27 @@ const useStyles = makeStyles({
     justifyContent: "flex-end",
     alignItems: "flex-end",
     width: "100%",
-    height: "90%",
+    height: "90vh",
+    [theme.breakpoints.between("xs", "md")]: {
+      height: "85vh",
+    },
+    [theme.breakpoints.down("xs")]: {
+      height: "85vh",
+    },
   },
   addDrawing: {
     maxWidth: "700px",
     minWidth: "200px",
     width: "100%",
     opacity: "0.6",
+    [theme.breakpoints.between("xs", "md")]: {
+      maxWidth: "300px",
+      minWidth: "200px",
+    },
+    [theme.breakpoints.down("xs")]: {
+      width: "0px",
+      height: "0px",
+    },
   },
   image: {
     maxWidth: "700px",
@@ -26,6 +55,9 @@ const useStyles = makeStyles({
   text: {
     fontSize: "20px",
     margin: "30px 0px",
+    [theme.breakpoints.down("xs")]: {
+      margin: "10px 0px",
+    },
   },
   inputContainer: {
     margin: "0px 20px",
@@ -51,6 +83,6 @@ const useStyles = makeStyles({
     position: "absolute",
     color: "#03fc03",
   },
-});
+}));
 
 export default useStyles;

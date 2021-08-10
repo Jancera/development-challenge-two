@@ -1,11 +1,5 @@
-:root {
-  --blue: #009adf;
-}
-
 body {
   margin: 0;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
 
 code {

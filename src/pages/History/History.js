@@ -58,7 +58,10 @@ const History = () => {
 
   return (
     <div className={classes.container}>
-      <Container maxWidth="sm">
+      <Container
+        className={classes.formContainer}
+        maxWidth="sm"
+      >
         <List
           component="nav"
           subheader={

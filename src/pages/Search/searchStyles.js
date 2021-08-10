@@ -2,11 +2,18 @@ import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
   mainContainer: {
+    overflow: "hidden",
     backgroundColor: "#fafafa",
     height: "90vh",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
+    [theme.breakpoints.between("xs", "md")]: {
+      height: "85vh",
+    },
+    [theme.breakpoints.down("xs")]: {
+      height: "85vh",
+    },
   },
   container: {
     display: "flex",
@@ -42,15 +49,29 @@ const useStyles = makeStyles((theme) => ({
     position: "absolute",
     display: "flex",
     width: "100%",
-    height: "90%",
+    height: "90vh",
     justifyContent: "flex-end",
     alignItems: "flex-end",
+    [theme.breakpoints.between("xs", "md")]: {
+      height: "85vh",
+    },
+    [theme.breakpoints.down("xs")]: {
+      height: "85vh",
+    },
   },
   searchDrawing: {
     maxWidth: "700px",
     minWidth: "200px",
     width: "100%",
     opacity: "0.6",
+    [theme.breakpoints.between("xs", "md")]: {
+      maxWidth: "500px",
+      minWidth: "200px",
+    },
+    [theme.breakpoints.down("xs")]: {
+      maxWidth: "300px",
+      minWidth: "200px",
+    },
   },
 }));
 

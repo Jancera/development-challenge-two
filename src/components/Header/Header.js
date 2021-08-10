@@ -40,8 +40,10 @@ const Header = () => {
         value={value}
         onChange={handleChange}
         textColor="secondary"
+        className={classes.tab}
       >
         <Tab
+          className={classes.tab}
           label="Início"
           disableRipple
           onClick={() => navigate("/")}
